@@ -22,8 +22,8 @@ Window {
     }
     function returnColorName (index){
         var color = ["Красный", "Зеленый", "Синий", "Пурпурный", "Желтый", "Черный", "Серый", "Белый", "Непонятный", "Лаймовый",
-                     "Голубой", "Розовый","Оранжевый", "Темно-Красный", "Оливковый", "Темно-Синий", "Желто-Зеленый", "Светло-Голубой",
-                     "Серебряный", "Томатный","Индиго", "Коралловый", "Песчаный", "Серо-Зеленый", "Золотой", "Светло-Розовый", "Красно-Оранжевый", "Хаки", "Светлый красный", "Яркий розовый"];
+                     "Голубой", "Фуксия","Оранжевый", "Темно-Красный", "Оливковый", "Темно-Синий", "Желто-Зеленый", "Светло-Голубой",
+                     "Серебряный", "Томатный","Индиго", "Коралловый", "Песчаный", "Серо-Зеленый", "Золотой", "Светло-Розовый", "Красно-Оранжевый", "Хаки", "Бледный красный", "Яркий розовый"];
         return color[index];
     }
 
@@ -118,7 +118,11 @@ Window {
                         Button {
                             id: button_create
                             anchors.fill: parent
-                            text: "Добавить готовый"
+                            Text {
+                                anchors.centerIn: parent
+                                text: "Добавить готовый"
+                                renderType: Text.NativeRendering
+                            }
                             onClicked: { page_stack.push(select_color_page) }
                         }
                     }
@@ -133,7 +137,11 @@ Window {
                         Button {
                             id: button_input
                             anchors.fill: parent
-                            text: "Ввести вручную"
+                            Text {
+                                anchors.centerIn: parent
+                                text: "Ввести вручную"
+                                renderType: Text.NativeRendering
+                            }
                             onClicked: { page_stack.push(input_color_page) }
                         }
                     }
@@ -148,7 +156,11 @@ Window {
                         Button {
                             id: button_delete
                             anchors.fill: parent
-                            text: "Очистить список"
+                            Text {
+                                anchors.centerIn: parent
+                                text: "Очистить список"
+                                renderType: Text.NativeRendering
+                            }
                             onClicked: {
                                 dataModel.clear()
                                 var db = LocalStorage.openDatabaseSync("ColorDB", "1.0", "Colors", 10000);
@@ -197,7 +209,7 @@ Window {
 
                             onClicked: {
                                 colorName = [model.color, model.text]
-                                page_stack.push(color_page)
+                                page_stack.push(color_page)  
                             }
                         }
                     }
@@ -210,6 +222,8 @@ Window {
         id: select_color_page
 
         Rectangle {
+            property string return_color_index: ""
+            property string return_color_name: ""
             id: rect
             ScrollView {
                 width: parent.width
@@ -230,8 +244,10 @@ Window {
                             MouseArea {
                                 anchors.fill: parent
                                 onClicked: {
-                                    dataModel.append({color: returnColor(index), text:returnColorName(index) })
-                                    colorSaving(returnColor(index), returnColorName(index))
+                                    return_color_index = returnColor(index)
+                                    return_color_name = returnColorName(index)
+                                    dataModel.append({color: return_color_index, text:return_color_name })
+                                    colorSaving(return_color_index, return_color_name)
                                     page_stack.pop()
                                     }
                                 }
@@ -264,7 +280,11 @@ Window {
                     Button {
                         id: button_create
                         anchors.fill: parent
-                        text: "Добавить"
+                        Text {
+                            anchors.centerIn: parent
+                            text: "Добавить"
+                            renderType: Text.NativeRendering
+                        }
                         onClicked: {
                             if (textInput_1.text != "" && textInput_2.text != "")
                             {
@@ -293,6 +313,7 @@ Window {
                     TextInput {
                         id: textInput_1
                         font.family: "Times New Roman"
+                        renderType: Text.NativeRendering
                         font.pointSize: 10
                         anchors.fill: parent
                         horizontalAlignment: Text.AlignHCenter
@@ -326,6 +347,7 @@ Window {
                     TextInput {
                         id: textInput_2
                         font.family: "Times New Roman"
+                        renderType: Text.NativeRendering
                         font.pointSize: 10
                         anchors.fill: parent
                         horizontalAlignment: Text.AlignHCenter
